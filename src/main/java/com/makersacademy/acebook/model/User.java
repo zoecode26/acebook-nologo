@@ -50,6 +50,25 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user")
     private List<Post> posts;
 
+
+
+    //linking photo column in database
+    @Column(nullable = true, length = 100)
+    private String photos;
+
+    public String getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(String photos) {
+        this.photos = photos;
+    }
+
+    @Transient
+    public String getPhotosImagePath() {
+        return "/user-photos/" + id + "/" + photos;
+    }
+
     /* @ManyToMany is defined in both entities but ONLY
     one entity can own the relationship! Here, Users class is the owner
     of the relationship.
@@ -117,11 +136,12 @@ public class User implements Serializable {
     /* constructors(acts as an initializer).
     Creates an instance of a user to be saved into a db.
      */
-    public User(String email, String firstName, String lastName, String password ) {
+    public User(String email, String firstName, String lastName, String password, String photos ) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
+        this.photos = photos;
     }
 
     // somehow interacts with line 37 in UserController?

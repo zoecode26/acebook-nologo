@@ -36930,6 +36930,9 @@ var Home = function Home(props) {
       props.user.firstName,
       "!"
     ),
+    _react2.default.createElement("img", { src: "/user-photos/3/space.jpg" }),
+    _react2.default.createElement(Image, { source: __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module './user-photos/3/space.jpg'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())) }),
+    _react2.default.createElement(Image, { source: __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module '/user-photos/3/space.jpg'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())) }),
     _react2.default.createElement(
       "p",
       null,

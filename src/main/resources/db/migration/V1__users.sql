@@ -1,9 +1,13 @@
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS table_roles;
+
 CREATE TABLE users (
     id bigserial PRIMARY KEY,
     email varchar(100) NOT NULL,
     first_name varchar(100) NOT NULL,
     last_name varchar(100) NOT NULL,
-    password varchar(100) NOT NULL
+    password varchar(100) NOT NULL,
+    photos varchar(100) NOT NULL
     );
 
 

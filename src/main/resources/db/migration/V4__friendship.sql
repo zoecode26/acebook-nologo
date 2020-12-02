@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS friends;
+
 CREATE TABLE friends (
     id bigserial PRIMARY KEY,
     person_id BIGINT NOT NULL,
