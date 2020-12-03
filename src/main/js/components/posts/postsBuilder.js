@@ -121,6 +121,7 @@ class PostsBuilder extends React.Component {
 
           <Button btnType="Success" clicked={this.createLike}>Test like</Button>
 
+
           <form onSubmit={this.createPost}>
             <textarea
                 cols="80"

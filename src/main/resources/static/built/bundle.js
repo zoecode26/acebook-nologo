@@ -38007,6 +38007,7 @@ var PostsBuilder = function (_React$Component) {
       });
     }
   }, {
+
     key: 'createLike',
     value: function createLike(event) {
       event.preventDefault();
@@ -38019,6 +38020,7 @@ var PostsBuilder = function (_React$Component) {
       });
     }
   }, {
+
     key: 'render',
     value: function render() {
       var _this7 = this;
@@ -38032,11 +38034,13 @@ var PostsBuilder = function (_React$Component) {
           'New Post'
         ),
         _react2.default.createElement(
+
           _Button2.default,
           { btnType: 'Success', clicked: this.createLike },
           'Test like'
         ),
         _react2.default.createElement(
+
           'form',
           { onSubmit: this.createPost },
           _react2.default.createElement('textarea', {
