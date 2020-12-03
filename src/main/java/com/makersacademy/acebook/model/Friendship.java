@@ -2,49 +2,50 @@
 //
 //import javax.persistence.*;
 //
-//@Table(name="friends")
+//@Table(name="FRIENDS")
 //@Entity
 //public class Friendship {
-//  @Id
-//  @GeneratedValue(strategy = GenerationType.IDENTITY)
-//  private long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private long id;
 //
-//  @ManyToOne
-//  @JoinColumn(name="person_id")
-//  private User person;
+//    @ManyToOne
+//    @JoinColumn(name="person_id")
+//    private User person;
 //
-//  @ManyToOne
-//  @JoinColumn(name="friend_id")
-//  private User friend;
+//    @ManyToOne
+//    @JoinColumn(name="friend_id")
+//    private User friend;
 //
-//  public Friendship(User person, User friend) {
-//    this.person = person;
-//    this.friend = friend;
-//  }
+//    public Friendship(User person, User friend){
+//        this.person = person;
+//        this.friend = friend;
+//    }
 //
-//  public Friendship() {
-//  }
+//    public Friendship(){
 //
-//  public long getId() {
-//    return id;
-//  }
+//    }
 //
-//  public void setId(long id) {
-//    this.id = id;
-//  }
+//    public long getId() {
+//        return id;
+//    }
 //
-//  @Override
-//  public boolean equals(Object o) {
-//    if (this == o) return true;
-//    if (o == null || getClass() != o.getClass()) return false;
+//    public void setId(long id) {
+//        this.id = id;
+//    }
 //
-//    Friendship that = (Friendship) o;
+//    @Override
+//    public boolean equals(Object o){
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
 //
-//    return id == that.id;
-//  }
+//        Friendship that = (Friendship) o;
 //
-//  @Override
-//  public int hashCode() {
-//    return (int) (id ^ (id >>> 32));
-//  }
+//        return id == that.id;
+//    }
+//
+//    @Override
+//    public int hashCode(){
+//        return (int) (id ^ (id >>> 32));
+//    }
 //}
