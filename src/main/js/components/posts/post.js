@@ -26,10 +26,10 @@ const Post = (props) => {
 			</div>
 			<div className="controls">
 				<Button btnType="Danger" clicked={props.deletePost}>Delete</Button>
+				<Button btnType="Success" clicked={props.likePost}> Like </Button>
 				<Button
 						btnType="Success"
-						clicked={props.showComments}
-						disabled={props.comments.length == 0}>
+						clicked={props.showComments}>
 					{props.displayComments ? "Hide Comments" : `Show Comments (${props.comments.length})`  }
 				</Button>
 			</div>
