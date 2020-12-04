@@ -23,7 +23,7 @@ A Facebook clone, for a bootcamp challenge,  which we developed in two weeks wit
 Flyway is being used to manage database migrations. All required SQL files are located in `/resources/db/migration`<br><br>
 Here's the database schema:
 
-<img src="images/db_schema.png" width="700" height="500">
+<img src="images/db_schema_updated.png" width="700" height="500">
 
 ### Features
 
