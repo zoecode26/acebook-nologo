@@ -21,6 +21,11 @@
 
 .post-content {
     padding: 5px;
+    margin-bottom: 5px;
+}
+
+.likes {
+    font-size: 12px;
 }
 
 .controls {

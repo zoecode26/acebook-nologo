@@ -5,6 +5,11 @@ import Button from "../UI/Button/Button";
 const Comment = (props) => {
   let date = new Date(props.comment.created_at);
   let formattedDate = moment(date).fromNow();
+  let deleteControls = null;
+  //show delete button if you made post
+  if(props.comment.user.id == props.user.id) {
+    deleteControls = <Button btnType="Danger" clicked={props.deleteComment}>Delete</Button>;
+  }
   return (
       <div className='comment-main'>
         <div className="comment-author">
@@ -14,7 +19,7 @@ const Comment = (props) => {
           {props.comment.content}
         </div>
         <div className="controls">
-          <Button btnType="Danger" clicked={props.deleteComment}>Delete</Button>
+          {deleteControls}
         </div>
       </div>
   )
