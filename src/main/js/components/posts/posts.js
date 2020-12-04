@@ -28,6 +28,8 @@ class Posts extends React.Component {
           user={this.props.user}
           post={post}
           deletePost={() => this.props.deletePost(post.id)}
+          likePost={() => this.props.likePost(post.id)}
+          likes={post.likes}
           comments={post.comments}
           displayComments={post.id == this.props.showCommentId}
           showComments={() => this.props.showComments(post.id)}

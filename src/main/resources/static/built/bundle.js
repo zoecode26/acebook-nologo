@@ -59426,10 +59426,17 @@ var Post = function Post(props) {
 				),
 				_react2.default.createElement(
 					_Button2.default,
+					{ btnType: "Success", clicked: props.likePost },
+					" Like "
+				),
+				_react2.default.createElement(
+					_Button2.default,
 					{
-						btnType: 'Success',
+
+						btnType: "Success",
 						clicked: props.showComments },
-					props.displayComments ? "Hide Comments" : 'Show Comments (' + props.comments.length + ')'
+					props.displayComments ? "Hide Comments" : "Show Comments (" + props.comments.length + ")"
+
 				)
 			)
 		),
@@ -59520,6 +59527,10 @@ var Posts = function (_React$Component) {
           deletePost: function deletePost() {
             return _this2.props.deletePost(post.id);
           },
+          likePost: function likePost() {
+            return _this2.props.likePost(post.id);
+          },
+          likes: post.likes,
           comments: post.comments,
           displayComments: post.id == _this2.props.showCommentId,
           showComments: function showComments() {
@@ -59601,6 +59612,7 @@ var PostsBuilder = function (_React$Component) {
     _this.getComments = _this.getComments.bind(_this);
     _this.showComments = _this.showComments.bind(_this);
     _this.updateComments = _this.updateComments.bind(_this);
+    _this.likePost = _this.likePost.bind(_this);
     return _this;
   }
 
@@ -59695,6 +59707,17 @@ var PostsBuilder = function (_React$Component) {
       });
     }
   }, {
+    key: 'likePost',
+    value: function likePost(id) {
+      client({ method: 'POST',
+        path: '/likes',
+        entity: { "user_id": this.props.user.id, "post_id": id },
+        headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+        console.log(response);
+      });
+    }
+  }, {
     key: 'inputChangeHandler',
     value: function inputChangeHandler(event) {
       this.setState({
@@ -59752,6 +59775,7 @@ var PostsBuilder = function (_React$Component) {
           user: this.props.user,
           posts: this.state.posts,
           deletePost: this.deletePost,
+          likePost: this.likePost,
           showCommentId: this.state.showCommentId,
           showComments: this.showComments,
           updateComments: this.updateComments })
