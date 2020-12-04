@@ -3,6 +3,7 @@ package com.makersacademy.acebook.controller;
 import com.makersacademy.acebook.dao.LikeDAO;
 import com.makersacademy.acebook.dao.PostDAO;
 import com.makersacademy.acebook.dao.UserDAO;
+import com.makersacademy.acebook.model.Comment;
 import com.makersacademy.acebook.model.Like;
 import com.makersacademy.acebook.model.Post;
 import com.makersacademy.acebook.model.User;
@@ -42,5 +43,11 @@ public class LikeController {
   @GetMapping("/likes/{post_id}")
   Iterable<Like>commentsForPost(@PathVariable(value="post_id") Post post){
     return likeDAO.findByPost(post);
+  }
+
+  @PostMapping("/unlike")
+  public void deletePost(@RequestBody Map<String,Object> body) {
+    Optional<Like> like = likeDAO.findById(Long.parseLong(body.get("like_id").toString()));
+    likeDAO.delete(like.get());
   }
 }

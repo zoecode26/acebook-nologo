@@ -49,6 +49,7 @@ class Comments extends Component {
       return <Comment
           key={comment.id}
           comment={comment}
+          user={this.props.user}
           deleteComment={() => this.deleteComment(comment.id)}/>
     });
 

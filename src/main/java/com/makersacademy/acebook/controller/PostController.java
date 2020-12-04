@@ -1,9 +1,11 @@
 package com.makersacademy.acebook.controller;
 
 import com.makersacademy.acebook.dao.CommentDAO;
+import com.makersacademy.acebook.dao.LikeDAO;
 import com.makersacademy.acebook.dao.PostDAO;
 import com.makersacademy.acebook.dao.UserDAO;
 import com.makersacademy.acebook.model.Comment;
+import com.makersacademy.acebook.model.Like;
 import com.makersacademy.acebook.model.Post;
 import com.makersacademy.acebook.model.User;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +20,13 @@ public class PostController {
   private final PostDAO postDAO;
   private final UserDAO userDAO;
   private final CommentDAO commentDAO;
+  private final LikeDAO likeDAO;
 
-  public PostController(PostDAO postDAO, UserDAO userDAO, CommentDAO commentDAO) {
+  public PostController(PostDAO postDAO, UserDAO userDAO, CommentDAO commentDAO, LikeDAO likeDAO) {
     this.postDAO = postDAO;
     this.userDAO = userDAO;
     this.commentDAO = commentDAO;
+    this.likeDAO = likeDAO;
   }
 
   //get all posts
@@ -50,6 +54,11 @@ public class PostController {
     Iterable<Comment> comments = commentDAO.findByPost(post);
     for(Comment comment : comments) {
       commentDAO.delete(comment);
+    }
+
+    Iterable<Like> likes = likeDAO.findByPost(post);
+    for(Like like : likes) {
+      likeDAO.delete(like);
     }
     postDAO.delete(post);
   }

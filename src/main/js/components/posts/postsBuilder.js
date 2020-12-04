@@ -21,11 +21,13 @@ class PostsBuilder extends React.Component {
     this.showComments = this.showComments.bind(this);
     this.updateComments = this.updateComments.bind(this);
     this.likePost = this.likePost.bind(this);
+    this.unlikePost = this.unlikePost.bind(this);
     this.sortByDate = this.sortByDate.bind(this);
   }
 
   componentDidMount() {
     this.getPosts();
+    this.getLikes();
   }
 
   getPosts() {
@@ -53,6 +55,14 @@ class PostsBuilder extends React.Component {
           loaded: true
         })
       }
+    });
+  }
+
+  getLikes() {
+    client({method: 'GET', path: '/likes'}).then(response => {
+      this.setState({
+        likes: response.entity
+      });
     });
   }
 
@@ -121,8 +131,23 @@ class PostsBuilder extends React.Component {
         headers: {"Content-Type": "application/json"}
       }).then(response => {
         console.log(response);
+        this.getLikes();
       })
   }
+
+  unlikePost(postId) {
+    const like = this.state.likes.filter(like => like.post.id == postId && like.user.id == this.props.user.id);
+    const likeId = like[0].id;
+    client({method: 'POST',
+      path: '/unlike',
+      entity: {"like_id": likeId },
+      headers: {"Content-Type": "application/json"}
+    }).then(response => {
+      console.log(response);
+      this.getLikes();
+    })
+  }
+
 
   inputChangeHandler(event) {
     this.setState({
@@ -152,6 +177,9 @@ class PostsBuilder extends React.Component {
                 user={this.props.user}
                 posts={this.state.posts}
                 deletePost={this.deletePost}
+                likePost={this.likePost}
+                unlikePost={this.unlikePost}
+                likes={this.state.likes}
                 showCommentId={this.state.showCommentId}
                 showComments={this.showComments}
                 updateComments={this.updateComments}/>
@@ -169,18 +197,7 @@ class PostsBuilder extends React.Component {
             <br/>
             <Button btnType="Success">Post</Button>
           </form>
-<<<<<<< HEAD
-          <Posts
-              user={this.props.user}
-              posts={this.state.posts}
-              deletePost={this.deletePost}
-              likePost={this.likePost}
-              showCommentId={this.state.showCommentId}
-              showComments={this.showComments}
-              updateComments={this.updateComments}/>
-=======
           {posts}
->>>>>>> a7a589919731c0c1bd77dcb2b54f357e93af7581
         </Aux>
 		)
 	}

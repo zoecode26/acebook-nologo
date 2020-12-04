@@ -18,6 +18,27 @@ const Post = (props) => {
 	}
 	let date = new Date(props.post.created_at);
 	let formattedDate = moment(date).fromNow();
+	let likesString = "";
+	let deleteControls = null;
+	//show delete button if you made post
+	if(props.post.user.id == props.user.id) {
+		deleteControls = <Button btnType="Danger" clicked={props.deletePost}>Delete</Button>;
+	}
+	let likeControls = <Button btnType="Success" clicked={props.likePost}> Like </Button>
+	if(props.likes.length != 0) {
+		likesString = "Liked by: "
+		props.likes.forEach(like => {
+			likesString += like.user.firstName + ", ";
+			if(like.user.id == props.user.id) {
+				likeControls = <Button btnType="Danger" clicked={props.unlikePost}>Unlike</Button>
+			}
+		})
+		likesString = likesString.slice(0, -2)
+	}
+
+
+
+
 
 	return (
 			<Aux>
@@ -28,14 +49,18 @@ const Post = (props) => {
 			<div className='post-content'>
 				{props.post.content}
 			</div>
+
 			<div className="controls">
-				<Button btnType="Danger" clicked={props.deletePost}>Delete</Button>
-				<Button btnType="Success" clicked={props.likePost}> Like </Button>
+				<div className='likes'>
+					{likesString}
+				</div>
+				{likeControls}
 				<Button
 						btnType="Success"
 						clicked={props.showComments}>
 					{props.displayComments ? "Hide Comments" : `Show Comments (${props.comments.length})`  }
 				</Button>
+				{deleteControls}
 			</div>
 		</div>
 				{comments}

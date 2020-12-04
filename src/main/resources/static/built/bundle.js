@@ -58548,6 +58548,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var Comment = function Comment(props) {
   var date = new Date(props.comment.created_at);
   var formattedDate = (0, _moment2.default)(date).fromNow();
+  var deleteControls = null;
+  //show delete button if you made post
+  if (props.comment.user.id == props.user.id) {
+    deleteControls = _react2.default.createElement(
+      _Button2.default,
+      { btnType: 'Danger', clicked: props.deleteComment },
+      'Delete'
+    );
+  }
   return _react2.default.createElement(
     'div',
     { className: 'comment-main' },
@@ -58573,11 +58582,7 @@ var Comment = function Comment(props) {
     _react2.default.createElement(
       'div',
       { className: 'controls' },
-      _react2.default.createElement(
-        _Button2.default,
-        { btnType: 'Danger', clicked: props.deleteComment },
-        'Delete'
-      )
+      deleteControls
     )
   );
 };
@@ -58692,6 +58697,7 @@ var Comments = function (_Component) {
         return _react2.default.createElement(_Comment2.default, {
           key: comment.id,
           comment: comment,
+          user: _this4.props.user,
           deleteComment: function deleteComment() {
             return _this4.deleteComment(comment.id);
           } });
@@ -59491,6 +59497,35 @@ var Post = function Post(props) {
 	}
 	var date = new Date(props.post.created_at);
 	var formattedDate = (0, _moment2.default)(date).fromNow();
+	var likesString = "";
+	var deleteControls = null;
+	//show delete button if you made post
+	if (props.post.user.id == props.user.id) {
+		deleteControls = _react2.default.createElement(
+			_Button2.default,
+			{ btnType: 'Danger', clicked: props.deletePost },
+			'Delete'
+		);
+	}
+	var likeControls = _react2.default.createElement(
+		_Button2.default,
+		{ btnType: 'Success', clicked: props.likePost },
+		' Like '
+	);
+	if (props.likes.length != 0) {
+		likesString = "Liked by: ";
+		props.likes.forEach(function (like) {
+			likesString += like.user.firstName + ", ";
+			if (like.user.id == props.user.id) {
+				likeControls = _react2.default.createElement(
+					_Button2.default,
+					{ btnType: 'Danger', clicked: props.unlikePost },
+					'Unlike'
+				);
+			}
+		});
+		likesString = likesString.slice(0, -2);
+	}
 
 	return _react2.default.createElement(
 		_Aux2.default,
@@ -59521,24 +59556,19 @@ var Post = function Post(props) {
 				'div',
 				{ className: 'controls' },
 				_react2.default.createElement(
-					_Button2.default,
-					{ btnType: 'Danger', clicked: props.deletePost },
-					'Delete'
+					'div',
+					{ className: 'likes' },
+					likesString
 				),
-				_react2.default.createElement(
-					_Button2.default,
-					{ btnType: "Success", clicked: props.likePost },
-					" Like "
-				),
+				likeControls,
 				_react2.default.createElement(
 					_Button2.default,
 					{
-
-						btnType: "Success",
+						btnType: 'Success',
 						clicked: props.showComments },
-					props.displayComments ? "Hide Comments" : "Show Comments (" + props.comments.length + ")"
-
-				)
+					props.displayComments ? "Hide Comments" : 'Show Comments (' + props.comments.length + ')'
+				),
+				deleteControls
 			)
 		),
 		comments
@@ -59631,7 +59661,12 @@ var Posts = function (_React$Component) {
           likePost: function likePost() {
             return _this2.props.likePost(post.id);
           },
-          likes: post.likes,
+          unlikePost: function unlikePost() {
+            return _this2.props.unlikePost(post.id);
+          },
+          likes: _this2.props.likes.filter(function (like) {
+            return like.post.id == post.id;
+          }),
           comments: post.comments,
           displayComments: post.id == _this2.props.showCommentId,
           showComments: function showComments() {
@@ -59718,11 +59753,9 @@ var PostsBuilder = function (_React$Component) {
     _this.getComments = _this.getComments.bind(_this);
     _this.showComments = _this.showComments.bind(_this);
     _this.updateComments = _this.updateComments.bind(_this);
-
     _this.likePost = _this.likePost.bind(_this);
-
+    _this.unlikePost = _this.unlikePost.bind(_this);
     _this.sortByDate = _this.sortByDate.bind(_this);
-
     return _this;
   }
 
@@ -59730,6 +59763,7 @@ var PostsBuilder = function (_React$Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       this.getPosts();
+      this.getLikes();
     }
   }, {
     key: 'getPosts',
@@ -59763,6 +59797,17 @@ var PostsBuilder = function (_React$Component) {
       });
     }
   }, {
+    key: 'getLikes',
+    value: function getLikes() {
+      var _this3 = this;
+
+      client({ method: 'GET', path: '/likes' }).then(function (response) {
+        _this3.setState({
+          likes: response.entity
+        });
+      });
+    }
+  }, {
     key: 'sortByDate',
     value: function sortByDate(array) {
       //sort posts, newest first
@@ -59776,16 +59821,16 @@ var PostsBuilder = function (_React$Component) {
   }, {
     key: 'getComments',
     value: function getComments(post) {
-      var _this3 = this;
+      var _this4 = this;
 
       client({ method: 'GET', path: '/comments/' + post.id }).then(function (response) {
         var comments = response.entity;
-        comments = _this3.sortByDate(comments);
+        comments = _this4.sortByDate(comments);
         post.comments = comments;
-        var posts = [].concat(_toConsumableArray(_this3.state.posts));
+        var posts = [].concat(_toConsumableArray(_this4.state.posts));
         posts.push(post);
-        var sortedPosts = _this3.sortByDate(posts);
-        _this3.setState({
+        var sortedPosts = _this4.sortByDate(posts);
+        _this4.setState({
           posts: sortedPosts,
           loaded: true
         });
@@ -59794,17 +59839,17 @@ var PostsBuilder = function (_React$Component) {
   }, {
     key: 'updateComments',
     value: function updateComments(post_id) {
-      var _this4 = this;
+      var _this5 = this;
 
       client({ method: 'GET', path: '/comments/' + post_id }).then(function (response) {
-        var posts = [].concat(_toConsumableArray(_this4.state.posts));
+        var posts = [].concat(_toConsumableArray(_this5.state.posts));
         var postToUpdate = posts.find(function (post) {
           return post.id == post_id;
         });
         var indexToUpdate = posts.indexOf(postToUpdate);
         postToUpdate.comments = response.entity;
         posts[indexToUpdate] = postToUpdate;
-        _this4.setState({
+        _this5.setState({
           posts: posts
         });
       });
@@ -59825,23 +59870,44 @@ var PostsBuilder = function (_React$Component) {
   }, {
     key: 'deletePost',
     value: function deletePost(id) {
-      var _this5 = this;
+      var _this6 = this;
 
       client({ method: 'DELETE',
         path: '/posts/' + id
       }).then(function (response) {
-        _this5.getPosts();
+        _this6.getPosts();
       });
     }
   }, {
     key: 'likePost',
     value: function likePost(id) {
+      var _this7 = this;
+
       client({ method: 'POST',
         path: '/likes',
         entity: { "user_id": this.props.user.id, "post_id": id },
         headers: { "Content-Type": "application/json" }
       }).then(function (response) {
         console.log(response);
+        _this7.getLikes();
+      });
+    }
+  }, {
+    key: 'unlikePost',
+    value: function unlikePost(postId) {
+      var _this8 = this;
+
+      var like = this.state.likes.filter(function (like) {
+        return like.post.id == postId && like.user.id == _this8.props.user.id;
+      });
+      var likeId = like[0].id;
+      client({ method: 'POST',
+        path: '/unlike',
+        entity: { "like_id": likeId },
+        headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+        console.log(response);
+        _this8.getLikes();
       });
     }
   }, {
@@ -59854,7 +59920,7 @@ var PostsBuilder = function (_React$Component) {
   }, {
     key: 'createPost',
     value: function createPost(event) {
-      var _this6 = this;
+      var _this9 = this;
 
       event.preventDefault();
       client({ method: 'POST',
@@ -59862,8 +59928,8 @@ var PostsBuilder = function (_React$Component) {
         entity: { "content": this.state.newPostText, "user_id": this.props.user.id },
         headers: { "Content-Type": "application/json" }
       }).then(function (response) {
-        _this6.getPosts();
-        _this6.setState({
+        _this9.getPosts();
+        _this9.setState({
           newPostText: ""
         });
       });
@@ -59871,7 +59937,7 @@ var PostsBuilder = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this7 = this;
+      var _this10 = this;
 
       var posts = _react2.default.createElement(_Spinner2.default, null);
       if (this.state.loaded) {
@@ -59879,6 +59945,9 @@ var PostsBuilder = function (_React$Component) {
           user: this.props.user,
           posts: this.state.posts,
           deletePost: this.deletePost,
+          likePost: this.likePost,
+          unlikePost: this.unlikePost,
+          likes: this.state.likes,
           showCommentId: this.state.showCommentId,
           showComments: this.showComments,
           updateComments: this.updateComments });
@@ -59900,7 +59969,7 @@ var PostsBuilder = function (_React$Component) {
             rows: '6',
             value: this.state.newPostText,
             onChange: function onChange(event) {
-              return _this7.inputChangeHandler(event);
+              return _this10.inputChangeHandler(event);
             } }),
           _react2.default.createElement('br', null),
           _react2.default.createElement(
@@ -59909,18 +59978,7 @@ var PostsBuilder = function (_React$Component) {
             'Post'
           )
         ),
-
-        _react2.default.createElement(_posts2.default, {
-          user: this.props.user,
-          posts: this.state.posts,
-          deletePost: this.deletePost,
-          likePost: this.likePost,
-          showCommentId: this.state.showCommentId,
-          showComments: this.showComments,
-          updateComments: this.updateComments })
-
         posts
-
       );
     }
   }]);
