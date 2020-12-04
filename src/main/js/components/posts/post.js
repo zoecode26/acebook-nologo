@@ -30,6 +30,7 @@ const Post = (props) => {
 			</div>
 			<div className="controls">
 				<Button btnType="Danger" clicked={props.deletePost}>Delete</Button>
+				<Button btnType="Success" clicked={props.likePost}> Like </Button>
 				<Button
 						btnType="Success"
 						clicked={props.showComments}>

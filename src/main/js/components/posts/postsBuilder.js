@@ -20,6 +20,7 @@ class PostsBuilder extends React.Component {
     this.getComments = this.getComments.bind(this);
     this.showComments = this.showComments.bind(this);
     this.updateComments = this.updateComments.bind(this);
+    this.likePost = this.likePost.bind(this);
     this.sortByDate = this.sortByDate.bind(this);
   }
 
@@ -113,6 +114,16 @@ class PostsBuilder extends React.Component {
     })
   }
 
+  likePost(id) {
+      client({method: 'POST',
+        path: '/likes',
+        entity: {"user_id": this.props.user.id, "post_id": id },
+        headers: {"Content-Type": "application/json"}
+      }).then(response => {
+        console.log(response);
+      })
+  }
+
   inputChangeHandler(event) {
     this.setState({
       newPostText: event.target.value
@@ -132,6 +143,7 @@ class PostsBuilder extends React.Component {
       })
     })
   }
+
 
 	render() {
     let posts = <Spinner />
@@ -157,7 +169,18 @@ class PostsBuilder extends React.Component {
             <br/>
             <Button btnType="Success">Post</Button>
           </form>
+<<<<<<< HEAD
+          <Posts
+              user={this.props.user}
+              posts={this.state.posts}
+              deletePost={this.deletePost}
+              likePost={this.likePost}
+              showCommentId={this.state.showCommentId}
+              showComments={this.showComments}
+              updateComments={this.updateComments}/>
+=======
           {posts}
+>>>>>>> a7a589919731c0c1bd77dcb2b54f357e93af7581
         </Aux>
 		)
 	}
