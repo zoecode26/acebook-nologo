@@ -32,7 +32,7 @@ Here's the database schema:
 - Unique Newsfeed for every user
 - Add/Remove posts
 - Add/Remove comments
-- Add/Remove friends
+- Add/Remove friends (Friend Requests)
 - Add/Remove likes
 - Timestamped posts & comments
 
